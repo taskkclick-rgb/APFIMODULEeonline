@@ -1,5 +1,7 @@
 <?php
 // index.php - AI Software Engineering Module - Home
+session_start();
+$user = $_SESSION['user'] ?? null;
 $page_title = "AI Software Engineering Module | Master AI, GitHub & n8n";
 $page = 'home';
 ?>
@@ -64,8 +66,14 @@ $page = 'home';
   </div>
 
   <div class="nav-actions">
-    <a href="login.php"><button class="btn-outline">Sign In</button></a>
-    <a href="courses.php"><button class="btn-primary">Start Learning</button></a>
+    <?php if ($user): ?>
+      <a href="dashboard.php" style="color:var(--primary-light);font-weight:600;text-decoration:none;margin-right:12px;"><i class="fas fa-th-large"></i> Dashboard</a>
+      <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-right: 8px;">Hi, <?= htmlspecialchars($user['name']) ?> 👋</span>
+      <a href="logout.php"><button class="btn-outline" style="padding: 6px 14px;">Sign Out</button></a>
+    <?php else: ?>
+      <a href="login.php"><button class="btn-outline">Sign In</button></a>
+      <a href="courses.php"><button class="btn-primary">Start Learning</button></a>
+    <?php endif; ?>
   </div>
 
   <div class="nav-toggle" id="navToggle">

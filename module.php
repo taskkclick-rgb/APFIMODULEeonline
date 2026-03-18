@@ -1,7 +1,10 @@
 <?php
 // module.php - Individual Module/Course Detail Page
+session_start();
+$user = $_SESSION['user'] ?? null;
 $course_id = (int)($_GET['id'] ?? 1);
 
+// All courses data
 $all_courses = [
   1 => ['track'=>'se', 'track_label'=>'Software Engineering', 'emoji'=>'⚙️', 'bg'=>'bg-1', 'tag_class'=>'tag-se', 'tag_label'=>'Software Engineering', 'level'=>'Beginner', 'level_class'=>'level-beginner',
     'title'=>'Clean Code & SOLID Principles',
@@ -31,6 +34,59 @@ $all_courses = [
       ]],
     ]
   ],
+  2 => ['track'=>'se', 'track_label'=>'Software Engineering', 'emoji'=>'🏗️', 'bg'=>'bg-6', 'tag_class'=>'tag-se', 'tag_label'=>'Software Engineering', 'level'=>'Intermediate', 'level_class'=>'level-intermediate',
+    'title'=>'Software Architecture Patterns',
+    'desc'=>'Master high-level system design. Learn monolithic vs microservices, event-driven architecture, and domain-driven design for building scalable enterprise applications.',
+    'duration'=>'8h 00m', 'lessons_count'=>16,
+    'instructor'=>'System Architect', 'instructor_init'=>'SA',
+    'skills'=>['Microservices', 'Event-Driven Design', 'Scalability', 'DDD', 'Cloud Architecture'],
+    'curriculum'=>[
+      ['section'=>'Architecture Basics', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Introduction to Patterns', 'duration'=>'15 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'The Monolith vs Microservices', 'duration'=>'25 min', 'type'=>'video'],
+      ]],
+      ['section'=>'Event-Driven Design', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Pub/Sub & Message Queues', 'duration'=>'20 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Event Sourcing Fundamentals', 'duration'=>'18 min', 'type'=>'video'],
+        ['icon'=>'💻', 'title'=>'Lab: Building an Event Bus', 'duration'=>'45 min', 'type'=>'exercise'],
+      ]],
+    ]
+  ],
+  3 => ['track'=>'se', 'track_label'=>'Software Engineering', 'emoji'=>'🧪', 'bg'=>'bg-1', 'tag_class'=>'tag-se', 'tag_label'=>'Software Engineering', 'level'=>'Intermediate', 'level_class'=>'level-intermediate',
+    'title'=>'Testing & TDD Mastery',
+    'desc'=>'Learn how to write testable code and ensure software reliability. Master unit, integration, and e2e testing with a professional Test-Driven Development workflow.',
+    'duration'=>'7h 00m', 'lessons_count'=>14,
+    'instructor'=>'QA Engineer', 'instructor_init'=>'QA',
+    'skills'=>['Unit Testing', 'TDD', 'Mocking', 'Integration Tests', 'E2E Testing'],
+    'curriculum'=>[
+      ['section'=>'Testing Foundations', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Why We Test', 'duration'=>'10 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'The Testing Pyramid', 'duration'=>'12 min', 'type'=>'video'],
+        ['icon'=>'📖', 'title'=>'Reading: Writing Your First Test', 'duration'=>'20 min', 'type'=>'reading'],
+      ]],
+      ['section'=>'Test-Driven Development', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Red-Green-Refactor Cycle', 'duration'=>'22 min', 'type'=>'video'],
+        ['icon'=>'💻', 'title'=>'Practice: TDD Kata', 'duration'=>'50 min', 'type'=>'exercise'],
+      ]],
+    ]
+  ],
+  4 => ['track'=>'se', 'track_label'=>'Software Engineering', 'emoji'=>'🚀', 'bg'=>'bg-6', 'tag_class'=>'tag-se', 'tag_label'=>'Software Engineering', 'level'=>'Advanced', 'level_class'=>'level-advanced',
+    'title'=>'CI/CD Pipelines & DevOps',
+    'desc'=>'Automate your deployment lifecycle. Learn to build robust CI/CD pipelines using GitHub Actions, Docker, and Kubernetes for modern cloud-native applications.',
+    'duration'=>'10h 00m', 'lessons_count'=>22,
+    'instructor'=>'DevOps Specialist', 'instructor_init'=>'DS',
+    'skills'=>['Docker', 'GitHub Actions', 'CI/CD', 'Kubernetes', 'Cloud Deployment'],
+    'curriculum'=>[
+      ['section'=>'DevOps Fundamentals', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Introduction to DevOps', 'duration'=>'15 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Virtualization vs Containerization', 'duration'=>'18 min', 'type'=>'video'],
+      ]],
+      ['section'=>'Docker & Containers', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Writing Dockerfiles', 'duration'=>'25 min', 'type'=>'video'],
+        ['icon'=>'💻', 'title'=>'Lab: Containerize a PHP App', 'duration'=>'40 min', 'type'=>'exercise'],
+      ]],
+    ]
+  ],
   5 => ['track'=>'ai', 'track_label'=>'AI Prompting', 'emoji'=>'🤖', 'bg'=>'bg-2', 'tag_class'=>'tag-ai', 'tag_label'=>'AI Prompting', 'level'=>'Beginner', 'level_class'=>'level-beginner',
     'title'=>'AI Prompt Engineering Fundamentals',
     'desc'=>'Master the art and science of crafting effective prompts for large language models. Learn zero-shot, few-shot, and chain-of-thought prompting from scratch, with hands-on exercises using ChatGPT, Claude, and Gemini.',
@@ -53,6 +109,45 @@ $all_courses = [
         ['icon'=>'▶️', 'title'=>'Debugging with AI', 'duration'=>'15 min', 'type'=>'video'],
         ['icon'=>'💻', 'title'=>'AI Pair Programming Lab', 'duration'=>'45 min', 'type'=>'exercise'],
         ['icon'=>'🎯', 'title'=>'Assessment', 'duration'=>'20 min', 'type'=>'quiz'],
+      ]],
+    ]
+  ],
+  6 => ['track'=>'ai', 'track_label'=>'AI Prompting', 'emoji'=>'🧠', 'bg'=>'bg-2', 'tag_class'=>'tag-ai', 'tag_label'=>'AI Prompting', 'level'=>'Intermediate', 'level_class'=>'level-intermediate',
+    'title'=>'ChatGPT for Software Developers',
+    'desc'=>'Level up your development workflow with ChatGPT. Learn how to generate complex functions, refactor legacy code, and write comprehensive documentation in seconds.',
+    'duration'=>'5h 30m', 'lessons_count'=>13,
+    'instructor'=>'AI Specialist', 'instructor_init'=>'AS',
+    'skills'=>['Code Generation', 'Automated Refactoring', 'Documentation', 'Unit Test Gen', 'API Design'],
+    'curriculum'=>[
+      ['section'=>'Workflow Optimization', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'AI-Driven Coding Speed', 'duration'=>'15 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Refactoring with GPT-4', 'duration'=>'20 min', 'type'=>'video'],
+      ]],
+    ]
+  ],
+  7 => ['track'=>'ai', 'track_label'=>'AI Prompting', 'emoji'=>'💎', 'bg'=>'bg-2', 'tag_class'=>'tag-ai', 'tag_label'=>'AI Prompting', 'level'=>'Intermediate', 'level_class'=>'level-intermediate',
+    'title'=>'Claude & Gemini for Engineering',
+    'desc'=>'Explore alternatives to ChatGPT. Learn how to leverage Claude\'s large context window for architectural reviews and Gemini\'s multi-modal capabilities for software design.',
+    'duration'=>'4h 00m', 'lessons_count'=>9,
+    'instructor'=>'LLM Researcher', 'instructor_init'=>'LR',
+    'skills'=>['Context Management', 'Model Comparison', 'Multi-modal AI', 'Large Codebase Analysis'],
+    'curriculum'=>[
+      ['section'=>'Multi-Model Mastery', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Why Use Different Models?', 'duration'=>'10 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Analyzing Large Files with Claude', 'duration'=>'25 min', 'type'=>'video'],
+      ]],
+    ]
+  ],
+  8 => ['track'=>'ai', 'track_label'=>'AI Prompting', 'emoji'=>'🔗', 'bg'=>'bg-2', 'tag_class'=>'tag-ai', 'tag_label'=>'AI Prompting', 'level'=>'Advanced', 'level_class'=>'level-advanced',
+    'title'=>'Advanced AI Integration for Developers',
+    'desc'=>'Go beyond prompting. Learn how to integrate AI directly into your applications using APIs, building custom RAG systems, and fine-tuning models for specific coding tasks.',
+    'duration'=>'7h 30m', 'lessons_count'=>18,
+    'instructor'=>'AI Engineer', 'instructor_init'=>'AE',
+    'skills'=>['OpenAI API', 'LangChain', 'RAG Systems', 'Vector Databases', 'Fine-tuning'],
+    'curriculum'=>[
+      ['section'=>'AI Engineering', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Introduction to AI APIs', 'duration'=>'15 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Building Your First RAG', 'duration'=>'35 min', 'type'=>'video'],
       ]],
     ]
   ],
@@ -84,6 +179,32 @@ $all_courses = [
       ]],
     ]
   ],
+  10 => ['track'=>'gh', 'track_label'=>'GitHub', 'emoji'=>'🌿', 'bg'=>'bg-3', 'tag_class'=>'tag-gh', 'tag_label'=>'GitHub', 'level'=>'Intermediate', 'level_class'=>'level-intermediate',
+    'title'=>'Git Branching Strategies & PRs',
+    'desc'=>'Learn professional branching models like GitFlow, GitHub Flow, and Trunk-Based Development. Master the art of the Perfect Pull Request and efficient code review cycles.',
+    'duration'=>'3h 30m', 'lessons_count'=>8,
+    'instructor'=>'Lead Developer', 'instructor_init'=>'LD',
+    'skills'=>['GitFlow', 'GitHub Flow', 'Trunk-Based Dev', 'PR Management', 'Reviewing Code'],
+    'curriculum'=>[
+      ['section'=>'Branching Models', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Choosing the Right Workflow', 'duration'=>'15 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Trunk-Based Development', 'duration'=>'20 min', 'type'=>'video'],
+      ]],
+    ]
+  ],
+  11 => ['track'=>'gh', 'track_label'=>'GitHub', 'emoji'=>'⚙️', 'bg'=>'bg-3', 'tag_class'=>'tag-gh', 'tag_label'=>'GitHub', 'level'=>'Advanced', 'level_class'=>'level-advanced',
+    'title'=>'GitHub Actions & Automation',
+    'desc'=>'Automate everything in your GitHub repo. Learn to build custom GitHub Actions, set up complex CI/CD workflows, and automate project management tasks.',
+    'duration'=>'6h 00m', 'lessons_count'=>15,
+    'instructor'=>'DevOps Architect', 'instructor_init'=>'DA',
+    'skills'=>['GitHub Actions', 'YAML Workflows', 'CI/CD Automation', 'Custom Actions', 'Marketplace Apps'],
+    'curriculum'=>[
+      ['section'=>'Workflow Automation', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'GitHub Actions Core Concepts', 'duration'=>'20 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Building CI Pipelines', 'duration'=>'30 min', 'type'=>'video'],
+      ]],
+    ]
+  ],
   12 => ['track'=>'n8n', 'track_label'=>'n8n Automation', 'emoji'=>'⚡', 'bg'=>'bg-4', 'tag_class'=>'tag-n8n', 'tag_label'=>'n8n Automation', 'level'=>'Beginner', 'level_class'=>'level-beginner',
     'title'=>'n8n Automation Bootcamp',
     'desc'=>'Build powerful automated workflows from scratch using n8n\'s visual workflow editor. Connect APIs, set up webhooks, schedule automations, and eliminate repetitive manual tasks across your engineering team.',
@@ -107,6 +228,32 @@ $all_courses = [
         ['icon'=>'▶️', 'title'=>'Google Sheets Automation', 'duration'=>'18 min', 'type'=>'video'],
         ['icon'=>'💻', 'title'=>'Capstone: Team Workflow', 'duration'=>'60 min', 'type'=>'exercise'],
         ['icon'=>'🎯', 'title'=>'Final Assessment', 'duration'=>'25 min', 'type'=>'quiz'],
+      ]],
+    ]
+  ],
+  13 => ['track'=>'n8n', 'track_label'=>'n8n Automation', 'emoji'=>'🔌', 'bg'=>'bg-4', 'tag_class'=>'tag-n8n', 'tag_label'=>'n8n Automation', 'level'=>'Intermediate', 'level_class'=>'level-intermediate',
+    'title'=>'n8n API Integrations',
+    'desc'=>'Master n8n\'s HTTP Request node. Learn to connect any service with an API, handle OAuth authentication, parse complex JSON, and build custom API-based automations.',
+    'duration'=>'5h 00m', 'lessons_count'=>12,
+    'instructor'=>'Integration Engineer', 'instructor_init'=>'IE',
+    'skills'=>['HTTP Node', 'OAuth 2.0', 'JSON Parsing', 'API Webhooks', 'Custom Headers'],
+    'curriculum'=>[
+      ['section'=>'API Fundamentals', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'Connecting to Any API', 'duration'=>'15 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Mastering OAuth', 'duration'=>'25 min', 'type'=>'video'],
+      ]],
+    ]
+  ],
+  14 => ['track'=>'n8n', 'track_label'=>'n8n Automation', 'emoji'=>'🤖', 'bg'=>'bg-4', 'tag_class'=>'tag-n8n', 'tag_label'=>'n8n Automation', 'level'=>'Advanced', 'level_class'=>'level-advanced',
+    'title'=>'n8n + AI Workflow Automation',
+    'desc'=>'The ultimate combined skill. Build AI-powered agents using n8n. Connect OpenAI, Anthropic, and Vector Databases to create automated AI researchers, support agents, and code reviewers.',
+    'duration'=>'8h 00m', 'lessons_count'=>14,
+    'instructor'=>'Automation Lead', 'instructor_init'=>'AL',
+    'skills'=>['AI Nodes', 'LangChain in n8n', 'Vectorstore', 'Autonomous Agents', 'AI Error Handling'],
+    'curriculum'=>[
+      ['section'=>'AI Automation', 'lessons'=>[
+        ['icon'=>'▶️', 'title'=>'AI Nodes Deep Dive', 'duration'=>'20 min', 'type'=>'video'],
+        ['icon'=>'▶️', 'title'=>'Building an AI Researcher', 'duration'=>'40 min', 'type'=>'video'],
       ]],
     ]
   ],
@@ -199,15 +346,27 @@ $page_title = $course['title'] . ' | AI Software Engineering Module';
     <a href="courses.php?track=n8n">n8n</a>
   </div>
   <div class="nav-actions">
-    <a href="login.php"><button class="btn-outline">Sign In</button></a>
-    <a href="courses.php"><button class="btn-primary">All Courses</button></a>
+    <?php if ($user): ?>
+      <a href="dashboard.php" style="color:var(--primary-light);font-weight:600;text-decoration:none;margin-right:12px;"><i class="fas fa-th-large"></i> Dashboard</a>
+      <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-right: 8px;">Hi, <?= htmlspecialchars($user['name']) ?> 👋</span>
+      <a href="logout.php"><button class="btn-outline" style="padding: 6px 14px;">Sign Out</button></a>
+    <?php else: ?>
+      <a href="login.php"><button class="btn-outline">Sign In</button></a>
+      <a href="courses.php"><button class="btn-primary">All Courses</button></a>
+    <?php endif; ?>
   </div>
   <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
 </nav>
 
 <!-- MODULE LAYOUT -->
 <div class="module-layout">
-
+  <?php 
+    $is_enrolled = false;
+    foreach ($_SESSION['enrollments'] ?? [] as $enr) {
+        $id_parts = explode('-', $enr['course_id']);
+        if (end($id_parts) == $course_id) { $is_enrolled = true; break; }
+    }
+  ?>
   <!-- LEFT: Course Content -->
   <div class="module-content">
     <!-- Breadcrumb -->
@@ -275,57 +434,27 @@ $page_title = $course['title'] . ' | AI Software Engineering Module';
     <!-- Curriculum Tab -->
     <div data-content="curriculum">
       <?php 
-        $lesson_num = 0;
+        $current_lesson_global_num = 0;
         foreach ($course['curriculum'] as $section): 
       ?>
         <div class="section-divider"><?= htmlspecialchars($section['section']) ?></div>
         <?php foreach ($section['lessons'] as $lesson): 
-          $lesson_num++;
+          $current_lesson_global_num++;
           $type_class = 'lesson-type-' . $lesson['type'];
         ?>
-          <div class="module-lesson <?= $lesson_num === 1 ? 'active' : '' ?>" id="lesson-<?= $lesson_num ?>">
+          <?php if ($is_enrolled): ?>
+            <a href="lesson.php?cid=<?= $course_id ?>&lid=<?= $current_lesson_global_num ?>" style="text-decoration:none; display:block;">
+          <?php endif; ?>
+          <div class="module-lesson <?= $current_lesson_global_num === 1 ? 'active' : '' ?>" id="lesson-<?= $current_lesson_global_num ?>">
             <span class="lesson-icon <?= $type_class ?>"><?= $lesson['icon'] ?></span>
             <span class="lesson-title"><?= htmlspecialchars($lesson['title']) ?></span>
             <span class="lesson-duration"><i class="fas fa-clock" style="margin-right:4px;"></i><?= $lesson['duration'] ?></span>
           </div>
+          <?php if ($is_enrolled): ?>
+            </a>
+          <?php endif; ?>
         <?php endforeach; ?>
       <?php endforeach; ?>
-    </div>
-
-    <!-- Overview Tab (hidden by default) -->
-    <div data-content="overview" style="display:none;">
-      <div class="instructor-card">
-        <div class="instructor-avatar-lg"><?= $course['instructor_init'] ?></div>
-        <div>
-          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Instructor</div>
-          <div style="font-weight:700;font-size:1rem;"><?= $course['instructor'] ?></div>
-          <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:4px;">Expert in <?= $course['track_label'] ?> with 8+ years of industry experience.</div>
-        </div>
-      </div>
-      <div style="margin-top:24px;padding:24px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);">
-        <div style="font-weight:700;margin-bottom:12px;">About This Course</div>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.8;"><?= htmlspecialchars($course['desc']) ?></p>
-        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border-light);">
-          <div style="font-weight:700;margin-bottom:12px;">Prerequisites</div>
-          <ul style="color:var(--text-secondary);font-size:0.875rem;list-style:disc;padding-left:20px;line-height:2;">
-            <li>Basic understanding of software development</li>
-            <li>A computer with internet access</li>
-            <li>Enthusiasm to learn! 🚀</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Resources Tab (hidden by default) -->
-    <div data-content="resources" style="display:none;">
-      <div style="padding:32px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);text-align:center;">
-        <div style="font-size:2.5rem;margin-bottom:12px;">📎</div>
-        <div style="font-weight:700;margin-bottom:8px;">Course Resources</div>
-        <div style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:20px;">Enroll to access all downloadable resources, templates, and reference sheets for this module.</div>
-        <button class="sidebar-enroll" data-course="<?= htmlspecialchars($course['title']) ?>" data-enroll style="max-width:200px;">
-          🚀 Enroll Now
-        </button>
-      </div>
     </div>
 
     <!-- Navigation -->
@@ -348,9 +477,17 @@ $page_title = $course['title'] . ' | AI Software Engineering Module';
       <div class="sidebar-body">
         <div class="sidebar-price">Free</div>
         <div class="sidebar-price-sub">✓ Full access for team members</div>
-        <button class="sidebar-enroll" data-course="<?= htmlspecialchars($course['title']) ?>" data-enroll>
-          🚀 Enroll in This Module
-        </button>
+        <?php if ($is_enrolled): ?>
+          <a href="lesson.php?cid=<?= $course_id ?>&lid=1" style="text-decoration:none;">
+            <button class="sidebar-enroll" style="background: var(--accent-green); box-shadow: 0 8px 24px rgba(16,185,129,0.3); width:100%;">
+              🎯 Start Study Now
+            </button>
+          </a>
+        <?php else: ?>
+          <button class="sidebar-enroll" data-course="<?= htmlspecialchars($course['title']) ?>" data-course-id="<?= $course['track'] ?>-<?= $course_id ?>" data-enroll>
+            🚀 Enroll in This Module
+          </button>
+        <?php endif; ?>
         <button class="btn-outline" style="width:100%;padding:12px;text-align:center;margin-bottom:0;cursor:pointer;"
           onclick="navigator.clipboard.writeText(window.location.href);this.textContent='✓ Link Copied!';">
           Share with Team
@@ -366,39 +503,22 @@ $page_title = $course['title'] . ' | AI Software Engineering Module';
         </div>
       </div>
     </div>
-
-    <!-- Related Courses -->
-    <div style="margin-top:24px;">
-      <div style="font-size:0.85rem;font-weight:700;margin-bottom:16px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.08em;">More in <?= $course['track_label'] ?></div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <a href="courses.php?track=<?= $course['track'] ?>" style="display:block;padding:14px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:var(--transition);"
-          onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
-          <div style="font-size:0.875rem;font-weight:600;">Browse All <?= $course['track_label'] ?> Modules</div>
-          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">View the complete track →</div>
-        </a>
-        <a href="courses.php" style="display:block;padding:14px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:var(--transition);"
-          onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
-          <div style="font-size:0.875rem;font-weight:600;">All Learning Modules</div>
-          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:3px;">14 courses across 4 tracks →</div>
-        </a>
-      </div>
-    </div>
   </div>
-
 </div>
 
-<!-- FOOTER -->
-<footer>
+<footer class="footer">
   <div class="footer-grid">
     <div>
-      <a href="index.php" class="nav-logo" style="display:inline-flex;">
+      <div class="nav-logo">
         <div class="nav-logo-icon">⚡</div>
-        <div class="nav-logo-text">
-          <span>AI Software Engineering</span>
-          <span>Module</span>
-        </div>
-      </a>
-      <p class="footer-brand-desc">Professional eLearning for engineering teams.</p>
+        <div class="nav-logo-text"><span>AI Software Engineering</span><span>Module</span></div>
+      </div>
+      <div class="footer-desc">Professional onboarding and training for modern engineering teams.</div>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
     </div>
     <div>
       <div class="footer-col-title">Tracks</div>
@@ -433,14 +553,11 @@ $page_title = $course['title'] . ' | AI Software Engineering Module';
 
 <script src="assets/js/main.js"></script>
 <script>
-// Play button effect
 document.getElementById('playBtn')?.addEventListener('click', function() {
   this.innerHTML = '<i class="fas fa-pause"></i>';
   const wrap = this.closest('.module-video-wrap');
   if (wrap) {
     wrap.style.background = 'linear-gradient(135deg, #0f0f24, #1a1a3a)';
-    const placeholder = wrap.querySelector('.module-video-placeholder');
-    if(placeholder) placeholder.querySelector('.play-btn').innerHTML = '<i class="fas fa-pause"></i>';
   }
 });
 </script>

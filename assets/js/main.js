@@ -72,21 +72,96 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Enroll Toast ---
+  // --- Enroll Logic & Loading Bar ---
   const enrollBtns = document.querySelectorAll('.course-enroll, .sidebar-enroll, [data-enroll]');
   const toast = document.getElementById('toast');
   const toastText = document.getElementById('toast-text');
 
   enrollBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      if (toast) {
-        const courseName = btn.getAttribute('data-course') || 'this course';
-        if (toastText) toastText.textContent = `Enrolled in "${courseName}"! Check your email.`;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3500);
-      }
+      const courseId = btn.getAttribute('data-course-id') || 'se-1';
+      const courseName = btn.getAttribute('data-course') || 'this course';
+      
+      // Call API IMMEDIATELY to store enrollment
+      fetch(`api.php?path=enroll`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ course_id: courseId })
+      }).then(response => {
+          if (response.ok) {
+              // Only show loader if API call was successful
+              showEnrollmentLoader(courseName, () => {
+                  if (toast) {
+                      if (toastText) toastText.textContent = `Enrolled in "${courseName}"! Analysis Complete.`;
+                      toast.classList.add('show');
+                      setTimeout(() => {
+                          toast.classList.remove('show');
+                          window.location.href = 'dashboard.php';
+                      }, 1500); // Faster redirect for better UX
+                  } else {
+                      window.location.href = 'dashboard.php';
+                  }
+              });
+          } else {
+              alert("Wait! You must be signed in to enroll in this course.");
+              window.location.href = 'login.php';
+          }
+      }).catch(err => {
+          console.error("Enrollment failed:", err);
+          alert("Something went wrong. Please try again.");
+      });
     });
   });
+
+  function showEnrollmentLoader(courseName, callback) {
+      // Create overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'enroll-overlay';
+      overlay.innerHTML = `
+        <div class="enroll-modal">
+            <div class="loader-logo">⚡ AISEM ANALYZING</div>
+            <p style="color:var(--text-secondary);margin-bottom:20px;">Applying AI to optimize your learning path for <br><strong>${courseName}</strong>...</p>
+            <div class="enroll-progress-bg">
+                <div class="enroll-progress-fill"></div>
+            </div>
+            <div class="enroll-status">Initializing AI weights...</div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      const fill = overlay.querySelector('.enroll-progress-fill');
+      const status = overlay.querySelector('.enroll-status');
+      const steps = [
+          "Connecting to AI Engine...",
+          "Analyzing skills gap...",
+          "Generating custom curriculum...",
+          "Optimizing module sequence...",
+          "Ready to start!"
+      ];
+
+      let progress = 0;
+      let stepI = 0;
+      const interval = setInterval(() => {
+          progress += 2;
+          fill.style.width = progress + '%';
+          
+          if (progress % 20 === 0 && stepI < steps.length) {
+              status.innerText = steps[stepI];
+              stepI++;
+          }
+
+          if (progress >= 100) {
+              clearInterval(interval);
+              setTimeout(() => {
+                  overlay.style.opacity = '0';
+                  setTimeout(() => {
+                      overlay.remove();
+                      callback();
+                  }, 400);
+              }, 500);
+          }
+      }, 40);
+  }
 
   // --- Lesson click ---
   const lessons = document.querySelectorAll('.module-lesson');

@@ -1,5 +1,7 @@
 <?php
 // courses.php - All Courses / Course Catalog
+session_start();
+$user = $_SESSION['user'] ?? null;
 $page_title = "Courses | AI Software Engineering Module";
 $active_track = $_GET['track'] ?? 'all';
 
@@ -122,8 +124,14 @@ $courses = [
     <a href="courses.php?track=n8n">n8n</a>
   </div>
   <div class="nav-actions">
-    <a href="login.php"><button class="btn-outline">Sign In</button></a>
-    <a href="courses.php"><button class="btn-primary">Start Learning</button></a>
+    <?php if ($user): ?>
+      <a href="dashboard.php" style="color:var(--primary-light);font-weight:600;text-decoration:none;margin-right:12px;"><i class="fas fa-th-large"></i> Dashboard</a>
+      <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-right: 8px;">Hi, <?= htmlspecialchars($user['name']) ?> 👋</span>
+      <a href="logout.php"><button class="btn-outline" style="padding: 6px 14px;">Sign Out</button></a>
+    <?php else: ?>
+      <a href="login.php"><button class="btn-outline">Sign In</button></a>
+      <a href="courses.php"><button class="btn-primary">Start Learning</button></a>
+    <?php endif; ?>
   </div>
   <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
 </nav>
@@ -201,15 +209,30 @@ $courses = [
               <span class="level-dot"></span><?= $course['level'] ?>
             </div>
             <div class="course-card-title"><?= htmlspecialchars($course['title']) ?></div>
+            <?php 
+              $is_e = false;
+              foreach ($_SESSION['enrollments'] ?? [] as $enr) {
+                  $id_parts = explode('-', $enr['course_id']);
+                  if (end($id_parts) == $course['id']) { $is_e = true; break; }
+              }
+            ?>
+            <?php if ($is_e): ?>
+              <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(16,185,129,0.1); color:var(--accent-green); padding:4px 10px; border-radius:100px; font-size:0.75rem; font-weight:700; margin-bottom:12px; border:1px solid rgba(16,185,129,0.2);">
+                <i class="fas fa-check-circle"></i> Enrolled
+              </div>
+            <?php endif; ?>
             <div class="course-card-desc"><?= htmlspecialchars($course['desc']) ?></div>
             <div class="course-card-footer">
               <div class="course-meta">
                 <div class="course-meta-item"><i class="fas fa-clock"></i> <?= $course['duration'] ?></div>
                 <div class="course-meta-item"><i class="fas fa-layer-group"></i> <?= $course['lessons'] ?> lessons</div>
               </div>
-              <button class="course-enroll" data-course="<?= htmlspecialchars($course['title']) ?>" data-enroll
-                onclick="window.location='module.php?id=<?= $course['id'] ?>'">
-                View →
+              <button class="course-enroll <?= $is_e ? 'btn-enrolled' : '' ?>" 
+                      data-course="<?= htmlspecialchars($course['title']) ?>" 
+                      data-course-id="<?= $course['track'] ?>-<?= $course['id'] ?>" 
+                      <?= $is_e ? "onclick=\"window.location='module.php?id=" . $course['id'] . "'\"" : 'data-enroll' ?> 
+                      style="<?= $is_e ? 'background:rgba(16,185,129,0.12); color:var(--accent-green); border:1px solid rgba(16,185,129,0.3);' : '' ?>">
+                <?= $is_e ? 'Continue' : 'Enroll Now' ?>
               </button>
             </div>
           </div>
