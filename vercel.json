@@ -1,9 +1,27 @@
 {
   "functions": {
-    "api/*.php": {
+    "api/index.php": {
       "runtime": "vercel-php@0.7.2"
     },
-    "*.php": {
+    "index.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "module.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "courses.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "dashboard.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "login.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "logout.php": {
+      "runtime": "vercel-php@0.7.2"
+    },
+    "lesson.php": {
       "runtime": "vercel-php@0.7.2"
     }
   },
