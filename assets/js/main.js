@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const courseName = btn.getAttribute('data-course') || 'this course';
       
       // Call API IMMEDIATELY to store enrollment
-      fetch(`api.php?path=enroll`, {
+      fetch(`api/index.php?path=enroll`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ course_id: courseId })

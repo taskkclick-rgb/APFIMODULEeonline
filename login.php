@@ -105,7 +105,7 @@ $page_title = "Sign In | AI Software Engineering Module";
         if (!isLogin) payload.name = document.getElementById('auth-name').value;
 
         try {
-            const res = await fetch(`api.php?path=${path}`, {
+            const res = await fetch(`api/index.php?path=${path}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(payload)
